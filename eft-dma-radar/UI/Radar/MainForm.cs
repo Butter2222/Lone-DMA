@@ -56,6 +56,7 @@ namespace eft_dma_radar.UI.Radar
         private Vector2 _mapPanPosition;
         private EspWidget _aimview;
         private PlayerInfoWidget _playerInfo;
+        private LootInfoWidget _lootInfo;
 
         /// <summary>
         /// Main UI/Application Config.
@@ -245,6 +246,8 @@ namespace eft_dma_radar.UI.Radar
             var inRaid = InRaid; // cache bool
             var localPlayer = LocalPlayer; // cache ref to current player
             var canvas = e.Surface.Canvas; // get Canvas reference to draw on
+            var mousePos = GetMousePosition(); // Implement this to track mouse position
+            var mouseClicked = CheckMouseClick();
             try
             {
                 SetFPS(inRaid);
@@ -396,12 +399,15 @@ namespace eft_dma_radar.UI.Radar
                             }
                         }
                     } // End Grp Connect
+                    
+                    DrawSelectedLootLine(canvas, localPlayer, mapParams);
 
                     if (allPlayers is not null &&
                         checkBox_ShowInfoTab.Checked) // Players Overlay
                         _playerInfo?.Draw(canvas, localPlayer, allPlayers);
-                    closestToMouse?.DrawMouseover(canvas, mapParams, localPlayer);// draw tooltip for object the mouse is closest to
-
+                        closestToMouse?.DrawMouseover(canvas, mapParams, localPlayer);// draw tooltip for object the mouse is closest to
+                    if (checkBox_ShowLootTab.Checked) // Loot Overlay
+                        _lootInfo?.Draw(canvas, localPlayer, mousePos, mouseClicked);
                     if (Config.ESPWidgetEnabled)
                         _aimview?.Draw(canvas);
                 }
@@ -414,13 +420,43 @@ namespace eft_dma_radar.UI.Radar
                     else if (!inRaid)
                         WaitingForRaidStatus(canvas);
                 }
-                SetStatusText(canvas);
+                //SetStatusText(canvas);
                 canvas.Flush(); // commit frame to GPU
             }
             catch (Exception ex) // Log rendering errors
             {
                 LoneLogging.WriteLine($"CRITICAL RENDER ERROR: {ex}");
             }
+        }
+        private void DrawSelectedLootLine(SKCanvas canvas, Player localPlayer, LoneMapParams mapParams)
+        {
+            var selectedLoot = _lootInfo?.GetSelectedLoot();
+            if (selectedLoot == null) return; // No selected loot, no line
+
+            var playerPos = localPlayer.Position.ToMapPos(mapParams.Map).ToZoomedPos(mapParams);
+            var lootPos = selectedLoot.Position.ToMapPos(mapParams.Map).ToZoomedPos(mapParams);
+
+            using var paint = new SKPaint
+            {
+                Color = SKColors.Red,
+                StrokeWidth = 3f,
+                Style = SKPaintStyle.Stroke,
+                IsAntialias = true
+            };
+
+            canvas.DrawLine(playerPos, lootPos, paint);
+        }
+        private SKPoint GetMousePosition()
+        {
+            var mouse = skglControl_Radar.PointToClient(Cursor.Position);
+            float dpiScaleX = skglControl_Radar.Width / (float)skglControl_Radar.ClientSize.Width;
+            float dpiScaleY = skglControl_Radar.Height / (float)skglControl_Radar.ClientSize.Height;
+
+            return new SKPoint(mouse.X * dpiScaleX, mouse.Y * dpiScaleY);
+        }
+        private bool CheckMouseClick()
+        {
+            return (Control.MouseButtons & MouseButtons.Left) != 0;
         }
 
         private readonly Stopwatch _statusSw = Stopwatch.StartNew();
@@ -927,6 +963,7 @@ namespace eft_dma_radar.UI.Radar
             // Update Widgets
             _aimview?.SetScaleFactor(newScale);
             _playerInfo?.SetScaleFactor(newScale);
+            _lootInfo?.SetScaleFactor(newScale);
 
             #region UpdatePaints
 
@@ -1626,6 +1663,8 @@ namespace eft_dma_radar.UI.Radar
                 "Toggles the Quest Helper feature. This will display Items and Zones that you need to pickup/visit for quests that you currently have active.");
             toolTip1.SetToolTip(checkBox_ShowInfoTab,
                 "Toggles the Player Info 'Widget' that gives you information about the players/bosses in your raid. Can be moved.");
+            toolTip1.SetToolTip(checkBox_ShowLootTab,
+                "Toggles the Loot 'Widget' that gives you information about the loot in your raid. Can be moved.");
             toolTip1.SetToolTip(checkBox_GrpConnect,
                 "Connects players that are grouped up via semi-transparent green lines. Does not apply to your own party.");
             toolTip1.SetToolTip(trackBar_AimlineLength, "Sets the Aimline Length for Local Player/Teammates");
@@ -1795,6 +1834,8 @@ namespace eft_dma_radar.UI.Radar
                 UIScale);
             _playerInfo = new PlayerInfoWidget(skglControl_Radar, Config.Widgets.PlayerInfoLocation,
                 Config.Widgets.PlayerInfoMinimized, UIScale);
+            _lootInfo = new LootInfoWidget(skglControl_Radar, Config.Widgets.LootInfoLocation,
+                Config.Widgets.LootInfoMinimized, UIScale);
         }
 
         private void SetMemWriteFeatures()
@@ -1919,7 +1960,7 @@ namespace eft_dma_radar.UI.Radar
         /// Set the status text in the top middle of the radar window.
         /// </summary>
         /// <param name="canvas"></param>
-        private void SetStatusText(SKCanvas canvas)
+        /*private void SetStatusText(SKCanvas canvas)
         {
             try
             {
@@ -1985,7 +2026,7 @@ namespace eft_dma_radar.UI.Radar
             {
                 LoneLogging.WriteLine($"ERROR Setting Aim UI Text: {ex}");
             }
-        }
+        }*/
 
         /// <summary>
         /// Load previously set GUI Config values. Run at startup.
@@ -2006,6 +2047,7 @@ namespace eft_dma_radar.UI.Radar
             checkBox_LootWishlist.Checked = Config.LootWishlist;
             checkBox_QuestHelper_Enabled.Checked = Config.QuestHelper.Enabled;
             checkBox_ShowInfoTab.Checked = Config.ShowInfoTab;
+            checkBox_ShowLootTab.Checked = Config.ShowLootTab;
             checkBox_HideCorpses.Checked = Config.HideCorpses;
             checkBox_ShowMines.Checked = Config.ShowMines;
             checkBox_TeammateAimlines.Checked = Config.TeammateAimlines;
@@ -2152,8 +2194,11 @@ namespace eft_dma_radar.UI.Radar
                 Config.Widgets.AimviewMinimized = _aimview.Minimized;
                 Config.Widgets.PlayerInfoLocation = _playerInfo.Rectangle;
                 Config.Widgets.PlayerInfoMinimized = _playerInfo.Minimized;
+                Config.Widgets.LootInfoLocation = _lootInfo.Rectangle;
+                Config.Widgets.LootInfoMinimized = _lootInfo.Minimized;
                 Config.AimLineLength = trackBar_AimlineLength.Value;
                 Config.ShowInfoTab = checkBox_ShowInfoTab.Checked;
+                Config.ShowLootTab = checkBox_ShowLootTab.Checked;
                 Config.HideNames = checkBox_HideNames.Checked;
                 Config.ShowMines = checkBox_ShowMines.Checked;
                 Config.ConnectGroups = checkBox_GrpConnect.Checked;
@@ -2265,6 +2310,8 @@ namespace eft_dma_radar.UI.Radar
             toggleNames.HotkeyStateChanged += ToggleNames_HotkeyStateChanged;
             var toggleInfo = new HotkeyActionController("Toggle Game Info Tab");
             toggleInfo.HotkeyStateChanged += ToggleInfo_HotkeyStateChanged;
+            var toggleLootInfo = new HotkeyActionController("Toggle Loot Info Tab");
+            toggleLootInfo.HotkeyStateChanged += ToggleLootInfo_HotkeyStateChanged;
             var engageAimbot = new HotkeyActionController("Engage Aimbot");
             engageAimbot.HotkeyStateChanged += EngageAimbot_HotkeyStateChanged;
             var toggleAimbotBone = new HotkeyActionController("Toggle Aimbot Bone");
@@ -2283,6 +2330,8 @@ namespace eft_dma_radar.UI.Radar
             toggleRageMode.HotkeyStateChanged += ToggleRageMode_HotkeyStateChanged;
             var toggleEsp = new HotkeyActionController("Toggle ESP");
             toggleEsp.HotkeyStateChanged += ToggleEsp_HotkeyStateChanged;
+            var toggleSilentAim = new HotkeyActionController("Toggle Silent Aim");
+            toggleSilentAim.HotkeyStateChanged += ToggleAimbot_HotkeyStateChanged;
             var toggleAutoBone = new HotkeyActionController("Toggle Auto Bone (Silent Aim)");
             toggleAutoBone.HotkeyStateChanged += ToggleAutoBone_HotkeyStateChanged;
             var toggleRandomBone = new HotkeyActionController("Toggle Random Bone (Aimbot)");
@@ -2312,6 +2361,8 @@ namespace eft_dma_radar.UI.Radar
             HotkeyManager.RegisterActionController(toggleESPWidget);
             HotkeyManager.RegisterActionController(toggleNames);
             HotkeyManager.RegisterActionController(toggleInfo);
+            HotkeyManager.RegisterActionController(toggleLootInfo);
+            HotkeyManager.RegisterActionController(toggleSilentAim);
             HotkeyManager.RegisterActionController(engageAimbot);
             HotkeyManager.RegisterActionController(toggleAimbotBone);
             HotkeyManager.RegisterActionController(toggleAimbotMode);
@@ -2472,6 +2523,12 @@ namespace eft_dma_radar.UI.Radar
                 checkBox_RageMode.Checked = !checkBox_RageMode.Checked;
         }
 
+        private void ToggleAimbot_HotkeyStateChanged(object sender, HotkeyEventArgs e) // added silent aim hotkey
+        {
+            if (e.State)
+                checkBox_AimBotEnabled.Checked = !checkBox_AimBotEnabled.Checked;
+        }
+
         private void ToggleSafeLock_HotkeyStateChanged(object sender, HotkeyEventArgs e)
         {
             if (e.State)
@@ -2553,6 +2610,12 @@ namespace eft_dma_radar.UI.Radar
         {
             if (e.State)
                 checkBox_ShowInfoTab.Checked = !checkBox_ShowInfoTab.Checked;
+        }
+
+        private void ToggleLootInfo_HotkeyStateChanged(object sender, HotkeyEventArgs e)
+        {
+            if (e.State)
+                checkBox_ShowLootTab.Checked = !checkBox_ShowLootTab.Checked;
         }
 
         private void ToggleNames_HotkeyStateChanged(object sender, HotkeyEventArgs e)

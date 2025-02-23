@@ -100,6 +100,12 @@ namespace eft_dma_radar.UI.Misc
         public bool ShowInfoTab { get; set; } = true;
 
         /// <summary>
+        /// Shows Loot Info Widget.
+        /// </summary>
+        [JsonPropertyName("showLootTab")]
+        public bool ShowLootTab { get; set; } = true;
+
+        /// <summary>
         /// Shows bodies/corpses on map.
         /// </summary>
         [JsonPropertyName("hideCorpses")]
@@ -1016,6 +1022,24 @@ namespace eft_dma_radar.UI.Misc
         }
 
         #endregion
+
+        #region Loot Info
+
+        [JsonPropertyName("lootInfoMinimized")]
+        public bool LootInfoMinimized { get; set; } = false;
+
+        [JsonInclude]
+        [JsonPropertyName("lootInfoLocation")]
+        public RectFSer _lootInfoLoc { private get; set; }
+        [JsonIgnore]
+        public SKRect LootInfoLocation
+        {
+            get => new(_lootInfoLoc.Left, _lootInfoLoc.Top, _lootInfoLoc.Right, _lootInfoLoc.Bottom);
+            set => _lootInfoLoc = new RectFSer(value.Left, value.Top, value.Right, value.Bottom);
+        }
+        
+        #endregion
+        
     }
 
     /// <summary>
