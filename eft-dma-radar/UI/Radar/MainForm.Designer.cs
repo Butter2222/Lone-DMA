@@ -81,6 +81,7 @@ namespace eft_dma_radar.UI.Radar
             checkBox_MapSetup = new CheckBox();
             checkBox_Aimview = new CheckBox();
             checkBox_ShowInfoTab = new CheckBox();
+            checkBox_ShowLootTab = new CheckBox();
             checkBox_GrpConnect = new CheckBox();
             checkBox_HideNames = new CheckBox();
             checkBox_ShowMines = new CheckBox();
@@ -718,6 +719,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_RadarSettings.Controls.Add(checkBox_MapSetup);
             flowLayoutPanel_RadarSettings.Controls.Add(checkBox_Aimview);
             flowLayoutPanel_RadarSettings.Controls.Add(checkBox_ShowInfoTab);
+            flowLayoutPanel_RadarSettings.Controls.Add(checkBox_ShowLootTab);
             flowLayoutPanel_RadarSettings.Controls.Add(checkBox_GrpConnect);
             flowLayoutPanel_RadarSettings.Controls.Add(checkBox_HideNames);
             flowLayoutPanel_RadarSettings.Controls.Add(checkBox_ShowMines);
@@ -934,10 +936,20 @@ namespace eft_dma_radar.UI.Radar
             checkBox_ShowInfoTab.Text = "Player Info Widget";
             checkBox_ShowInfoTab.UseVisualStyleBackColor = true;
             // 
+            // checkBox_ShowLootTab
+            // 
+            checkBox_ShowLootTab.AutoSize = true;
+            checkBox_ShowLootTab.Location = new Point(383, 126);
+            checkBox_ShowLootTab.Name = "checkBox_ShowLootTab";
+            checkBox_ShowLootTab.Size = new Size(115, 19);
+            checkBox_ShowLootTab.TabIndex = 33;
+            checkBox_ShowLootTab.Text = "Loot Info Widget";
+            checkBox_ShowLootTab.UseVisualStyleBackColor = true;
+            // 
             // checkBox_GrpConnect
             // 
             checkBox_GrpConnect.AutoSize = true;
-            checkBox_GrpConnect.Location = new Point(383, 126);
+            checkBox_GrpConnect.Location = new Point(504, 126);
             checkBox_GrpConnect.Name = "checkBox_GrpConnect";
             checkBox_GrpConnect.Size = new Size(112, 19);
             checkBox_GrpConnect.TabIndex = 33;
@@ -947,7 +959,7 @@ namespace eft_dma_radar.UI.Radar
             // checkBox_HideNames
             // 
             checkBox_HideNames.AutoSize = true;
-            checkBox_HideNames.Location = new Point(501, 126);
+            checkBox_HideNames.Location = new Point(622, 126);
             checkBox_HideNames.Name = "checkBox_HideNames";
             checkBox_HideNames.Size = new Size(91, 19);
             checkBox_HideNames.TabIndex = 26;
@@ -958,7 +970,7 @@ namespace eft_dma_radar.UI.Radar
             // checkBox_ShowMines
             // 
             checkBox_ShowMines.AutoSize = true;
-            checkBox_ShowMines.Location = new Point(598, 126);
+            checkBox_ShowMines.Location = new Point(719, 126);
             checkBox_ShowMines.Name = "checkBox_ShowMines";
             checkBox_ShowMines.Size = new Size(90, 19);
             checkBox_ShowMines.TabIndex = 38;
@@ -968,7 +980,7 @@ namespace eft_dma_radar.UI.Radar
             // checkBox_TeammateAimlines
             // 
             checkBox_TeammateAimlines.AutoSize = true;
-            checkBox_TeammateAimlines.Location = new Point(694, 126);
+            checkBox_TeammateAimlines.Location = new Point(815, 126);
             checkBox_TeammateAimlines.Name = "checkBox_TeammateAimlines";
             checkBox_TeammateAimlines.Size = new Size(131, 19);
             checkBox_TeammateAimlines.TabIndex = 39;
@@ -982,7 +994,7 @@ namespace eft_dma_radar.UI.Radar
             checkBox_AIAimlines.Checked = true;
             checkBox_AIAimlines.CheckState = CheckState.Checked;
             flowLayoutPanel_RadarSettings.SetFlowBreak(checkBox_AIAimlines, true);
-            checkBox_AIAimlines.Location = new Point(831, 126);
+            checkBox_AIAimlines.Location = new Point(952, 126);
             checkBox_AIAimlines.Name = "checkBox_AIAimlines";
             checkBox_AIAimlines.Size = new Size(86, 19);
             checkBox_AIAimlines.TabIndex = 60;
@@ -3478,6 +3490,8 @@ namespace eft_dma_radar.UI.Radar
         private CheckBox checkBox_ShowFood;
         private CheckBox checkBox_ShowMeds;
         private CheckBox checkBox_ShowInfoTab;
+        private CheckBox checkBox_ShowLootTab;
+        
         private CheckBox checkBox_GrpConnect;
         private CheckBox checkBox_NoRecoilSway;
         private CheckBox checkBox_InfStamina;
