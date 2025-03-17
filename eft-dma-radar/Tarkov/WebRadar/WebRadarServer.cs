@@ -11,6 +11,7 @@ using eft_dma_radar.Tarkov.WebRadar.Data;
 using eft_dma_shared.Common.Misc;
 using eft_dma_shared.Common.Misc.MessagePack;
 using eft_dma_shared.Common.Misc.Commercial;
+using eft_dma_radar.Tarkov.Loot;
 
 namespace eft_dma_radar.Tarkov.WebRadar
 {
@@ -157,27 +158,47 @@ namespace eft_dma_radar.Tarkov.WebRadar
         {
             var hubContext = _webHost.Services.GetRequiredService<IHubContext<RadarServerHub>>();
             var tickRate = _tickRate;
+        
             while (true)
             {
                 try
                 {
+                    // Players
                     if (Memory.InRaid && Memory.Players is IReadOnlyCollection<Player> players && players.Count > 0)
                     {
                         _update.InGame = true;
                         _update.MapID = Memory.MapID;
                         _update.Players = players.Select(p => WebRadarPlayer.CreateFromPlayer(p));
+        
+                        // Loot
+                        if (Memory.Loot?.UnfilteredLoot is IReadOnlyCollection<LootItem> loot && loot.Count > 0)
+                        {
+                            _update.Loot = loot.Select(l => WebRadarLoot.CreateFromLoot(l));
+                        }
+                        else
+                        {
+                            _update.Loot = null;
+                        }
                     }
                     else
                     {
                         _update.InGame = false;
                         _update.MapID = null;
                         _update.Players = null;
+                        _update.Loot = null;
                     }
+        
                     _update.Version++;
+        
+                    // Send update to all connected clients
                     await hubContext.Clients.All.SendAsync("RadarUpdate", _update);
                 }
-                catch { }
-                // Wait for specified interval to regulate Tick Rate
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Worker] Error: {ex.Message}");
+                }
+        
+                // Wait for the next update
                 _waitTimer.AutoWait(tickRate);
             }
         }
@@ -248,7 +269,7 @@ namespace eft_dma_radar.Tarkov.WebRadar
                 string password = httpContext?.Request?.Query?["password"].ToString() ?? "";
                 if (password != Password)
                 {
-                    Context.Abort();
+                    LoneLogging.WriteLine($"WebRadar Unauthorized Connection Attempt: {httpContext.Connection.RemoteIpAddress}");
                     return;
                 }
 

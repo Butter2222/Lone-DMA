@@ -391,7 +391,82 @@ namespace eft_dma_shared.Common.Misc
             ReadOnlySpan<byte> span = array;
             return span.FindSignatureOffset(signature, mask);
         }
+        public static uint FindSignature(this byte[] data, in byte[] signature, in string mask = null)
+        {
+            if (data == null || signature == null || data.Length < signature.Length)
+                return uint.MaxValue;
 
+            if (mask == null)
+            {
+                for (int i = 0; i <= data.Length - signature.Length; i++)
+                {
+                    bool isMatch = true;
+                    for (int j = 0; j < signature.Length; j++)
+                    {
+                        if (data[i + j] != signature[j])
+                        {
+                            isMatch = false;
+                            break;
+                        }
+                    }
+
+                    if (isMatch)
+                        return (uint)i;
+                }
+            }
+            else
+            {
+                if (signature.Length != mask.Length)
+                    throw new Exception("[FIND SIGNATURE] Invalid mask length! Make sure mask is the same length as the signature.");
+
+                for (int i = 0; i <= data.Length - signature.Length; i++)
+                {
+                    bool isMatch = true;
+                    for (int j = 0; j < signature.Length; j++)
+                    {
+                        if (mask[j] == 'x' && data[i + j] != signature[j])
+                        {
+                            isMatch = false;
+                            break;
+                        }
+                        else if (mask[j] != 'x' && mask[j] != '?')
+                            throw new Exception("[FIND SIGNATURE] Invalid character in mask! Use \"x\" for match and \"?\" for wildcard.");
+                    }
+
+                    if (isMatch)
+                        return (uint)i;
+                }
+            }
+
+            return uint.MaxValue; // Not found
+        }
+        /// <summary>
+        /// Merges a patch into the byte[] with an optional positive or negative offset.
+        /// </summary>
+        public static byte[] Patch(this byte[] data, in byte[] patch, int offset = 0x0)
+        {
+            // Determine the start index of the patch in the merged array
+            int startIndex = offset < 0 ? 0 : offset;
+            // Determine additional space needed at the beginning for a negative offset
+            int prependedSpace = offset < 0 ? Math.Abs(offset) : 0;
+            // Final length of the merged array
+            int finalLength = Math.Max(data.Length + prependedSpace, startIndex + patch.Length);
+
+            byte[] patchedArray = new byte[finalLength];
+
+            // Copy the original data into the mergedArray, adjusted for any prepended space due to a negative offset
+            Array.Copy(data, 0, patchedArray, prependedSpace, data.Length);
+
+            // Merge the patch
+            for (int i = 0; i < patch.Length; i++)
+            {
+                int index = startIndex + i;
+                if (index < patchedArray.Length)
+                    patchedArray[index] = patch[i];
+            }
+
+            return patchedArray;
+        }
         /// <summary>
         /// Checks if an array contains a signature, and returns the offset where the signature occurs.
         /// </summary>

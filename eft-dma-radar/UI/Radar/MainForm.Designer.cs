@@ -65,6 +65,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_RadarSettings = new FlowLayoutPanel();
             label2 = new Label();
             label24 = new Label();
+            linkLabel_CheckForUpdates = new LinkLabel();
             label1 = new Label();
             button_Restart = new Button();
             button_HotkeyManager = new Button();
@@ -106,6 +107,7 @@ namespace eft_dma_radar.UI.Radar
             label9 = new Label();
             label25 = new Label();
             button_WebRadarStart = new Button();
+            button_EspServerStart = new Button();
             checkBox_WebRadarUPNP = new CheckBox();
             label_WebRadarHost = new Label();
             textBox_WebRadarBindIP = new TextBox();
@@ -121,6 +123,8 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_MemWrites = new FlowLayoutPanel();
             label3 = new Label();
             checkBox_AdvancedMemWrites = new CheckBox();
+            checkBox_hideRaidcode = new CheckBox();
+            checkBox_streamerMode = new CheckBox();
             checkBox_AntiPage = new CheckBox();
             checkBox_AimBotEnabled = new CheckBox();
             checkBox_NoRecoilSway = new CheckBox();
@@ -164,7 +168,9 @@ namespace eft_dma_radar.UI.Radar
             label17 = new Label();
             radioButton_Chams_Basic = new RadioButton();
             radioButton_Chams_Visible = new RadioButton();
-            radioButton_Chams_Vischeck = new RadioButton();
+            radioButton_Chams_VisCheckGlow = new RadioButton();
+            radioButton_Chams_VischeckFlat = new RadioButton();
+            radioButton_Chams_VisCheckWireframe = new RadioButton();
             flowLayoutPanel_AdvancedChams = new FlowLayoutPanel();
             label14 = new Label();
             label15 = new Label();
@@ -173,6 +179,12 @@ namespace eft_dma_radar.UI.Radar
             label33 = new Label();
             textBox_VischeckInvisColor = new TextBox();
             button_VischeckInvisColorPick = new Button();
+            lblPMCVisColor = new Label();
+            textBox_VischeckVisColorPMC = new TextBox();
+            button_VischeckVisColorPickPMC = new Button();
+            lblPMCinVisColor = new Label();
+            textBox_VischeckInvisColorPMC = new TextBox();
+            button_VischeckInvisColorPickPMC = new Button();
             flowLayoutPanel_LTW = new FlowLayoutPanel();
             label28 = new Label();
             label_LTWAmount = new Label();
@@ -703,6 +715,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_RadarSettings.BorderStyle = BorderStyle.FixedSingle;
             flowLayoutPanel_RadarSettings.Controls.Add(label2);
             flowLayoutPanel_RadarSettings.Controls.Add(label24);
+            flowLayoutPanel_RadarSettings.Controls.Add(linkLabel_CheckForUpdates);
             flowLayoutPanel_RadarSettings.Controls.Add(label1);
             flowLayoutPanel_RadarSettings.Controls.Add(button_Restart);
             flowLayoutPanel_RadarSettings.Controls.Add(button_HotkeyManager);
@@ -751,10 +764,17 @@ namespace eft_dma_radar.UI.Radar
             label24.TabIndex = 46;
             label24.Text = "label24";
             // 
+            // linkLabel_CheckForUpdates
+            // 
+            linkLabel_CheckForUpdates.Location = new Point(9, 21);
+            linkLabel_CheckForUpdates.Name = "linkLabel_CheckForUpdates";
+            linkLabel_CheckForUpdates.Size = new Size(100, 23);
+            linkLabel_CheckForUpdates.TabIndex = 47;
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(10, 21);
+            label1.Location = new Point(116, 21);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(169, 45);
@@ -765,7 +785,7 @@ namespace eft_dma_radar.UI.Radar
             // button_Restart
             // 
             button_Restart.Font = new Font("Segoe UI", 9.75F);
-            button_Restart.Location = new Point(186, 24);
+            button_Restart.Location = new Point(292, 24);
             button_Restart.Name = "button_Restart";
             button_Restart.Size = new Size(107, 41);
             button_Restart.TabIndex = 18;
@@ -775,7 +795,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             // button_HotkeyManager
             // 
-            button_HotkeyManager.Location = new Point(299, 24);
+            button_HotkeyManager.Location = new Point(405, 24);
             button_HotkeyManager.Name = "button_HotkeyManager";
             button_HotkeyManager.Size = new Size(107, 41);
             button_HotkeyManager.TabIndex = 34;
@@ -785,7 +805,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             // button_Radar_ColorPicker
             // 
-            button_Radar_ColorPicker.Location = new Point(412, 24);
+            button_Radar_ColorPicker.Location = new Point(518, 24);
             button_Radar_ColorPicker.Name = "button_Radar_ColorPicker";
             button_Radar_ColorPicker.Size = new Size(107, 41);
             button_Radar_ColorPicker.TabIndex = 21;
@@ -795,7 +815,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             // button_BackupConfig
             // 
-            button_BackupConfig.Location = new Point(525, 24);
+            button_BackupConfig.Location = new Point(631, 24);
             button_BackupConfig.Name = "button_BackupConfig";
             button_BackupConfig.Size = new Size(107, 41);
             button_BackupConfig.TabIndex = 20;
@@ -807,7 +827,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             label_AimlineLength.Anchor = AnchorStyles.Right;
             label_AimlineLength.AutoSize = true;
-            label_AimlineLength.Location = new Point(639, 39);
+            label_AimlineLength.Location = new Point(745, 39);
             label_AimlineLength.Margin = new Padding(4, 0, 4, 0);
             label_AimlineLength.Name = "label_AimlineLength";
             label_AimlineLength.Size = new Size(88, 15);
@@ -820,7 +840,7 @@ namespace eft_dma_radar.UI.Radar
             trackBar_AimlineLength.Anchor = AnchorStyles.Right;
             trackBar_AimlineLength.BackColor = SystemColors.Window;
             trackBar_AimlineLength.LargeChange = 50;
-            trackBar_AimlineLength.Location = new Point(735, 24);
+            trackBar_AimlineLength.Location = new Point(841, 24);
             trackBar_AimlineLength.Margin = new Padding(4, 3, 4, 3);
             trackBar_AimlineLength.Maximum = 1500;
             trackBar_AimlineLength.Minimum = 10;
@@ -835,7 +855,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             label_MaxDist.Anchor = AnchorStyles.Right;
             label_MaxDist.AutoSize = true;
-            label_MaxDist.Location = new Point(834, 39);
+            label_MaxDist.Location = new Point(940, 39);
             label_MaxDist.Name = "label_MaxDist";
             label_MaxDist.Size = new Size(73, 15);
             label_MaxDist.TabIndex = 35;
@@ -846,7 +866,7 @@ namespace eft_dma_radar.UI.Radar
             trackBar_MaxDist.Anchor = AnchorStyles.Right;
             trackBar_MaxDist.BackColor = SystemColors.Window;
             trackBar_MaxDist.LargeChange = 20;
-            trackBar_MaxDist.Location = new Point(913, 24);
+            trackBar_MaxDist.Location = new Point(1019, 24);
             trackBar_MaxDist.Maximum = 1500;
             trackBar_MaxDist.Minimum = 100;
             trackBar_MaxDist.Name = "trackBar_MaxDist";
@@ -859,7 +879,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             label_UIScale.Anchor = AnchorStyles.Right;
             label_UIScale.AutoSize = true;
-            label_UIScale.Location = new Point(1011, 39);
+            label_UIScale.Location = new Point(1117, 39);
             label_UIScale.Name = "label_UIScale";
             label_UIScale.Size = new Size(72, 15);
             label_UIScale.TabIndex = 28;
@@ -871,7 +891,7 @@ namespace eft_dma_radar.UI.Radar
             trackBar_UIScale.Anchor = AnchorStyles.Right;
             trackBar_UIScale.BackColor = SystemColors.Window;
             trackBar_UIScale.LargeChange = 10;
-            trackBar_UIScale.Location = new Point(1089, 24);
+            trackBar_UIScale.Location = new Point(3, 75);
             trackBar_UIScale.Maximum = 200;
             trackBar_UIScale.Minimum = 50;
             trackBar_UIScale.Name = "trackBar_UIScale";
@@ -884,7 +904,7 @@ namespace eft_dma_radar.UI.Radar
             // 
             label_ContainerDist.Anchor = AnchorStyles.Right;
             label_ContainerDist.AutoSize = true;
-            label_ContainerDist.Location = new Point(3, 90);
+            label_ContainerDist.Location = new Point(101, 90);
             label_ContainerDist.Name = "label_ContainerDist";
             label_ContainerDist.Size = new Size(103, 15);
             label_ContainerDist.TabIndex = 59;
@@ -895,7 +915,7 @@ namespace eft_dma_radar.UI.Radar
             trackBar_ContainerDist.Anchor = AnchorStyles.Right;
             trackBar_ContainerDist.BackColor = SystemColors.Window;
             flowLayoutPanel_RadarSettings.SetFlowBreak(trackBar_ContainerDist, true);
-            trackBar_ContainerDist.Location = new Point(112, 75);
+            trackBar_ContainerDist.Location = new Point(210, 75);
             trackBar_ContainerDist.Maximum = 1000;
             trackBar_ContainerDist.Minimum = 5;
             trackBar_ContainerDist.Name = "trackBar_ContainerDist";
@@ -1190,6 +1210,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_WebRadarSettings.Controls.Add(label9);
             flowLayoutPanel_WebRadarSettings.Controls.Add(label25);
             flowLayoutPanel_WebRadarSettings.Controls.Add(button_WebRadarStart);
+            flowLayoutPanel_WebRadarSettings.Controls.Add(button_EspServerStart);
             flowLayoutPanel_WebRadarSettings.Controls.Add(checkBox_WebRadarUPNP);
             flowLayoutPanel_WebRadarSettings.Controls.Add(label_WebRadarHost);
             flowLayoutPanel_WebRadarSettings.Controls.Add(textBox_WebRadarBindIP);
@@ -1235,6 +1256,17 @@ namespace eft_dma_radar.UI.Radar
             button_WebRadarStart.Text = "Start";
             button_WebRadarStart.UseVisualStyleBackColor = true;
             button_WebRadarStart.Click += button_WebRadarStart_Click;
+            // 
+            // button_EspServerStart
+            // 
+            button_EspServerStart.Enabled = false;
+            button_EspServerStart.Location = new Point(9, 24);
+            button_EspServerStart.Name = "button_EspServerStart";
+            button_EspServerStart.Size = new Size(96, 31);
+            button_EspServerStart.TabIndex = 56;
+            button_EspServerStart.Text = "Start Esp";
+            button_EspServerStart.UseVisualStyleBackColor = true;
+            button_EspServerStart.Click += button_EspServerStart_Click;
             // 
             // checkBox_WebRadarUPNP
             // 
@@ -1372,6 +1404,8 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_MemWrites.BorderStyle = BorderStyle.FixedSingle;
             flowLayoutPanel_MemWrites.Controls.Add(label3);
             flowLayoutPanel_MemWrites.Controls.Add(checkBox_AdvancedMemWrites);
+            flowLayoutPanel_MemWrites.Controls.Add(checkBox_hideRaidcode);
+            flowLayoutPanel_MemWrites.Controls.Add(checkBox_streamerMode);
             flowLayoutPanel_MemWrites.Controls.Add(checkBox_AntiPage);
             flowLayoutPanel_MemWrites.Controls.Add(checkBox_AimBotEnabled);
             flowLayoutPanel_MemWrites.Controls.Add(checkBox_NoRecoilSway);
@@ -1399,7 +1433,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_Settings.SetFlowBreak(flowLayoutPanel_MemWrites, true);
             flowLayoutPanel_MemWrites.Location = new Point(3, 634);
             flowLayoutPanel_MemWrites.Name = "flowLayoutPanel_MemWrites";
-            flowLayoutPanel_MemWrites.Size = new Size(1230, 328);
+            flowLayoutPanel_MemWrites.Size = new Size(1230, 427);
             flowLayoutPanel_MemWrites.TabIndex = 1;
             // 
             // label3
@@ -1424,12 +1458,34 @@ namespace eft_dma_radar.UI.Radar
             checkBox_AdvancedMemWrites.Text = "Enable Advanced MemWrites (Very Risky)";
             checkBox_AdvancedMemWrites.UseVisualStyleBackColor = true;
             // 
+            // checkBox_hideRaidcode
+            // 
+            checkBox_hideRaidcode.AutoSize = true;
+            checkBox_hideRaidcode.Location = new Point(255, 28);
+            checkBox_hideRaidcode.Name = "checkBox_hideRaidcode";
+            checkBox_hideRaidcode.Size = new Size(105, 19);
+            checkBox_hideRaidcode.TabIndex = 78;
+            checkBox_hideRaidcode.Text = "Hide RaidCode";
+            checkBox_hideRaidcode.UseVisualStyleBackColor = true;
+            checkBox_hideRaidcode.CheckedChanged += checkBox_hideRaidcode_CheckedChanged;
+            // 
+            // checkBox_streamerMode
+            // 
+            checkBox_streamerMode.AutoSize = true;
+            checkBox_streamerMode.Location = new Point(366, 28);
+            checkBox_streamerMode.Name = "checkBox_streamerMode";
+            checkBox_streamerMode.Size = new Size(104, 19);
+            checkBox_streamerMode.TabIndex = 78;
+            checkBox_streamerMode.Text = "StreamerMode";
+            checkBox_streamerMode.UseVisualStyleBackColor = true;
+            checkBox_streamerMode.CheckedChanged += checkBox_streamerMode_CheckedChanged;
+            // 
             // checkBox_AntiPage
             // 
             checkBox_AntiPage.AutoSize = true;
             checkBox_AntiPage.Enabled = false;
             flowLayoutPanel_MemWrites.SetFlowBreak(checkBox_AntiPage, true);
-            checkBox_AntiPage.Location = new Point(255, 28);
+            checkBox_AntiPage.Location = new Point(476, 28);
             checkBox_AntiPage.Name = "checkBox_AntiPage";
             checkBox_AntiPage.Size = new Size(79, 19);
             checkBox_AntiPage.TabIndex = 77;
@@ -1901,12 +1957,14 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_Chams.Controls.Add(label17);
             flowLayoutPanel_Chams.Controls.Add(radioButton_Chams_Basic);
             flowLayoutPanel_Chams.Controls.Add(radioButton_Chams_Visible);
-            flowLayoutPanel_Chams.Controls.Add(radioButton_Chams_Vischeck);
+            flowLayoutPanel_Chams.Controls.Add(radioButton_Chams_VisCheckGlow);
+            flowLayoutPanel_Chams.Controls.Add(radioButton_Chams_VischeckFlat);
+            flowLayoutPanel_Chams.Controls.Add(radioButton_Chams_VisCheckWireframe);
             flowLayoutPanel_Chams.Controls.Add(flowLayoutPanel_AdvancedChams);
             flowLayoutPanel_Chams.Enabled = false;
             flowLayoutPanel_Chams.Location = new Point(3, 215);
             flowLayoutPanel_Chams.Name = "flowLayoutPanel_Chams";
-            flowLayoutPanel_Chams.Size = new Size(457, 108);
+            flowLayoutPanel_Chams.Size = new Size(821, 133);
             flowLayoutPanel_Chams.TabIndex = 4;
             // 
             // label17
@@ -1925,7 +1983,7 @@ namespace eft_dma_radar.UI.Radar
             radioButton_Chams_Basic.Anchor = AnchorStyles.Right;
             radioButton_Chams_Basic.AutoSize = true;
             radioButton_Chams_Basic.Checked = true;
-            radioButton_Chams_Basic.Location = new Point(3, 56);
+            radioButton_Chams_Basic.Location = new Point(3, 28);
             radioButton_Chams_Basic.Name = "radioButton_Chams_Basic";
             radioButton_Chams_Basic.Size = new Size(52, 19);
             radioButton_Chams_Basic.TabIndex = 1;
@@ -1939,7 +1997,7 @@ namespace eft_dma_radar.UI.Radar
             radioButton_Chams_Visible.Anchor = AnchorStyles.Right;
             radioButton_Chams_Visible.AutoSize = true;
             radioButton_Chams_Visible.Enabled = false;
-            radioButton_Chams_Visible.Location = new Point(61, 56);
+            radioButton_Chams_Visible.Location = new Point(61, 28);
             radioButton_Chams_Visible.Name = "radioButton_Chams_Visible";
             radioButton_Chams_Visible.Size = new Size(59, 19);
             radioButton_Chams_Visible.TabIndex = 6;
@@ -1947,18 +2005,44 @@ namespace eft_dma_radar.UI.Radar
             radioButton_Chams_Visible.UseVisualStyleBackColor = true;
             radioButton_Chams_Visible.CheckedChanged += radioButton_Chams_Visible_CheckedChanged;
             // 
-            // radioButton_Chams_Vischeck
+            // radioButton_Chams_VisCheckGlow
             // 
-            radioButton_Chams_Vischeck.Anchor = AnchorStyles.Right;
-            radioButton_Chams_Vischeck.AutoSize = true;
-            radioButton_Chams_Vischeck.Enabled = false;
-            radioButton_Chams_Vischeck.Location = new Point(126, 56);
-            radioButton_Chams_Vischeck.Name = "radioButton_Chams_Vischeck";
-            radioButton_Chams_Vischeck.Size = new Size(71, 19);
-            radioButton_Chams_Vischeck.TabIndex = 2;
-            radioButton_Chams_Vischeck.Text = "Vischeck";
-            radioButton_Chams_Vischeck.UseVisualStyleBackColor = true;
-            radioButton_Chams_Vischeck.CheckedChanged += radioButton_Chams_Vischeck_CheckedChanged;
+            radioButton_Chams_VisCheckGlow.Anchor = AnchorStyles.Right;
+            radioButton_Chams_VisCheckGlow.AutoSize = true;
+            radioButton_Chams_VisCheckGlow.Enabled = false;
+            radioButton_Chams_VisCheckGlow.Location = new Point(126, 28);
+            radioButton_Chams_VisCheckGlow.Name = "radioButton_Chams_VisCheckGlow";
+            radioButton_Chams_VisCheckGlow.Size = new Size(98, 19);
+            radioButton_Chams_VisCheckGlow.TabIndex = 2;
+            radioButton_Chams_VisCheckGlow.Text = "VischeckGlow";
+            radioButton_Chams_VisCheckGlow.UseVisualStyleBackColor = true;
+            radioButton_Chams_VisCheckGlow.CheckedChanged += radioButton_Chams_VisCheckGlow_CheckedChanged;
+            // 
+            // radioButton_Chams_VischeckFlat
+            // 
+            radioButton_Chams_VischeckFlat.Anchor = AnchorStyles.Right;
+            radioButton_Chams_VischeckFlat.AutoSize = true;
+            radioButton_Chams_VischeckFlat.Enabled = false;
+            radioButton_Chams_VischeckFlat.Location = new Point(230, 28);
+            radioButton_Chams_VischeckFlat.Name = "radioButton_Chams_VischeckFlat";
+            radioButton_Chams_VischeckFlat.Size = new Size(90, 19);
+            radioButton_Chams_VischeckFlat.TabIndex = 2;
+            radioButton_Chams_VischeckFlat.Text = "VischeckFlat";
+            radioButton_Chams_VischeckFlat.UseVisualStyleBackColor = true;
+            radioButton_Chams_VischeckFlat.CheckedChanged += radioButton_Chams_VischeckFlat_CheckedChanged;
+            // 
+            // radioButton_Chams_VisCheckWireframe
+            // 
+            radioButton_Chams_VisCheckWireframe.Anchor = AnchorStyles.Right;
+            radioButton_Chams_VisCheckWireframe.AutoSize = true;
+            radioButton_Chams_VisCheckWireframe.Enabled = false;
+            radioButton_Chams_VisCheckWireframe.Location = new Point(326, 28);
+            radioButton_Chams_VisCheckWireframe.Name = "radioButton_Chams_VisCheckWireframe";
+            radioButton_Chams_VisCheckWireframe.Size = new Size(95, 19);
+            radioButton_Chams_VisCheckWireframe.TabIndex = 2;
+            radioButton_Chams_VisCheckWireframe.Text = "VischeckWire";
+            radioButton_Chams_VisCheckWireframe.UseVisualStyleBackColor = true;
+            radioButton_Chams_VisCheckWireframe.CheckedChanged += radioButton_Chams_VisCheckWireframe_CheckedChanged;
             // 
             // flowLayoutPanel_AdvancedChams
             // 
@@ -1973,10 +2057,16 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_AdvancedChams.Controls.Add(label33);
             flowLayoutPanel_AdvancedChams.Controls.Add(textBox_VischeckInvisColor);
             flowLayoutPanel_AdvancedChams.Controls.Add(button_VischeckInvisColorPick);
+            flowLayoutPanel_AdvancedChams.Controls.Add(lblPMCVisColor);
+            flowLayoutPanel_AdvancedChams.Controls.Add(textBox_VischeckVisColorPMC);
+            flowLayoutPanel_AdvancedChams.Controls.Add(button_VischeckVisColorPickPMC);
+            flowLayoutPanel_AdvancedChams.Controls.Add(lblPMCinVisColor);
+            flowLayoutPanel_AdvancedChams.Controls.Add(textBox_VischeckInvisColorPMC);
+            flowLayoutPanel_AdvancedChams.Controls.Add(button_VischeckInvisColorPickPMC);
             flowLayoutPanel_AdvancedChams.Enabled = false;
-            flowLayoutPanel_AdvancedChams.Location = new Point(203, 28);
+            flowLayoutPanel_AdvancedChams.Location = new Point(3, 53);
             flowLayoutPanel_AdvancedChams.Name = "flowLayoutPanel_AdvancedChams";
-            flowLayoutPanel_AdvancedChams.Size = new Size(249, 75);
+            flowLayoutPanel_AdvancedChams.Size = new Size(813, 75);
             flowLayoutPanel_AdvancedChams.TabIndex = 5;
             // 
             // label14
@@ -2051,6 +2141,66 @@ namespace eft_dma_radar.UI.Radar
             button_VischeckInvisColorPick.UseVisualStyleBackColor = true;
             button_VischeckInvisColorPick.Click += button_VischeckInvisColorPick_Click;
             // 
+            // lblPMCVisColor
+            // 
+            lblPMCVisColor.Anchor = AnchorStyles.Right;
+            lblPMCVisColor.AutoSize = true;
+            lblPMCVisColor.Location = new Point(250, 51);
+            lblPMCVisColor.Name = "lblPMCVisColor";
+            lblPMCVisColor.Size = new Size(112, 15);
+            lblPMCVisColor.TabIndex = 5;
+            lblPMCVisColor.Text = "PMC/Boss Vis Color";
+            // 
+            // textBox_VischeckVisColorPMC
+            // 
+            textBox_VischeckVisColorPMC.Anchor = AnchorStyles.Right;
+            textBox_VischeckVisColorPMC.Location = new Point(368, 47);
+            textBox_VischeckVisColorPMC.MaxLength = 9;
+            textBox_VischeckVisColorPMC.Name = "textBox_VischeckVisColorPMC";
+            textBox_VischeckVisColorPMC.Size = new Size(72, 23);
+            textBox_VischeckVisColorPMC.TabIndex = 4;
+            textBox_VischeckVisColorPMC.TextChanged += textBox_VischeckVisColorPMC_TextChanged;
+            // 
+            // button_VischeckVisColorPickPMC
+            // 
+            button_VischeckVisColorPickPMC.Location = new Point(446, 47);
+            button_VischeckVisColorPickPMC.Name = "button_VischeckVisColorPickPMC";
+            button_VischeckVisColorPickPMC.Size = new Size(75, 23);
+            button_VischeckVisColorPickPMC.TabIndex = 8;
+            button_VischeckVisColorPickPMC.Text = "Color";
+            button_VischeckVisColorPickPMC.UseVisualStyleBackColor = true;
+            button_VischeckVisColorPickPMC.Click += button_VischeckVisColorPickPMC_Click;
+            // 
+            // lblPMCinVisColor
+            // 
+            lblPMCinVisColor.Anchor = AnchorStyles.Right;
+            lblPMCinVisColor.AutoSize = true;
+            lblPMCinVisColor.Location = new Point(527, 51);
+            lblPMCinVisColor.Name = "lblPMCinVisColor";
+            lblPMCinVisColor.Size = new Size(122, 15);
+            lblPMCinVisColor.TabIndex = 7;
+            lblPMCinVisColor.Text = "PMC/Boss InVis Color";
+            // 
+            // textBox_VischeckInvisColorPMC
+            // 
+            textBox_VischeckInvisColorPMC.Anchor = AnchorStyles.Right;
+            textBox_VischeckInvisColorPMC.Location = new Point(655, 47);
+            textBox_VischeckInvisColorPMC.MaxLength = 9;
+            textBox_VischeckInvisColorPMC.Name = "textBox_VischeckInvisColorPMC";
+            textBox_VischeckInvisColorPMC.Size = new Size(72, 23);
+            textBox_VischeckInvisColorPMC.TabIndex = 6;
+            textBox_VischeckInvisColorPMC.TextChanged += textBox_VischeckInvisColorPMC_TextChanged;
+            // 
+            // button_VischeckInvisColorPickPMC
+            // 
+            button_VischeckInvisColorPickPMC.Location = new Point(733, 47);
+            button_VischeckInvisColorPickPMC.Name = "button_VischeckInvisColorPickPMC";
+            button_VischeckInvisColorPickPMC.Size = new Size(75, 23);
+            button_VischeckInvisColorPickPMC.TabIndex = 9;
+            button_VischeckInvisColorPickPMC.Text = "Color";
+            button_VischeckInvisColorPickPMC.UseVisualStyleBackColor = true;
+            button_VischeckInvisColorPickPMC.Click += button_VischeckInvisColorPickPMC_Click;
+            // 
             // flowLayoutPanel_LTW
             // 
             flowLayoutPanel_LTW.AutoSize = true;
@@ -2060,7 +2210,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_LTW.Controls.Add(label_LTWAmount);
             flowLayoutPanel_LTW.Controls.Add(trackBar_LTWAmount);
             flowLayoutPanel_LTW.Enabled = false;
-            flowLayoutPanel_LTW.Location = new Point(466, 215);
+            flowLayoutPanel_LTW.Location = new Point(830, 215);
             flowLayoutPanel_LTW.Name = "flowLayoutPanel_LTW";
             flowLayoutPanel_LTW.Size = new Size(236, 68);
             flowLayoutPanel_LTW.TabIndex = 5;
@@ -2112,7 +2262,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_WideLean.Controls.Add(label_WideLeanAmt);
             flowLayoutPanel_WideLean.Controls.Add(trackBar_WideLeanAmt);
             flowLayoutPanel_WideLean.Enabled = false;
-            flowLayoutPanel_WideLean.Location = new Point(708, 215);
+            flowLayoutPanel_WideLean.Location = new Point(3, 354);
             flowLayoutPanel_WideLean.Name = "flowLayoutPanel_WideLean";
             flowLayoutPanel_WideLean.Size = new Size(340, 68);
             flowLayoutPanel_WideLean.TabIndex = 64;
@@ -2184,7 +2334,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_MonitorSettings.Controls.Add(button_DetectRes);
             flowLayoutPanel_MonitorSettings.Dock = DockStyle.Top;
             flowLayoutPanel_Settings.SetFlowBreak(flowLayoutPanel_MonitorSettings, true);
-            flowLayoutPanel_MonitorSettings.Location = new Point(3, 968);
+            flowLayoutPanel_MonitorSettings.Location = new Point(3, 1067);
             flowLayoutPanel_MonitorSettings.Name = "flowLayoutPanel_MonitorSettings";
             flowLayoutPanel_MonitorSettings.Size = new Size(1230, 70);
             flowLayoutPanel_MonitorSettings.TabIndex = 2;
@@ -2287,7 +2437,7 @@ namespace eft_dma_radar.UI.Radar
             flowLayoutPanel_ESPSettings.Controls.Add(flowLayoutPanel4);
             flowLayoutPanel_ESPSettings.Dock = DockStyle.Top;
             flowLayoutPanel_Settings.SetFlowBreak(flowLayoutPanel_ESPSettings, true);
-            flowLayoutPanel_ESPSettings.Location = new Point(3, 1044);
+            flowLayoutPanel_ESPSettings.Location = new Point(3, 1143);
             flowLayoutPanel_ESPSettings.Name = "flowLayoutPanel_ESPSettings";
             flowLayoutPanel_ESPSettings.Size = new Size(1230, 311);
             flowLayoutPanel_ESPSettings.TabIndex = 3;
@@ -3586,7 +3736,9 @@ namespace eft_dma_radar.UI.Radar
         private CheckBox checkBox_ESPAIRender_Weapons;
         private CheckBox checkBox_ESPAIRender_Labels;
         private CheckBox checkBox_ESP_RaidStats;
-        private RadioButton radioButton_Chams_Vischeck;
+        private RadioButton radioButton_Chams_VisCheckGlow;
+        private RadioButton radioButton_Chams_VischeckFlat;
+        private RadioButton radioButton_Chams_VisCheckWireframe;
         private RadioButton radioButton_Chams_Basic;
         private ToolTip toolTip1;
         private CheckBox checkBox_CurrentLootFilter_Enabled;
@@ -3645,6 +3797,7 @@ namespace eft_dma_radar.UI.Radar
         private TextBox textBox_WebRadarPassword;
         private LinkLabel linkLabel_WebRadarLink;
         private Button button_WebRadarStart;
+        private Button button_EspServerStart;
         private CheckBox checkBox_WebRadarUPNP;
         private TextBox textBox_WebRadarTickRate;
         private Label label_WebRadarTickRate;
@@ -3659,7 +3812,7 @@ namespace eft_dma_radar.UI.Radar
         private CheckBox checkBox_WideLean;
         private Label label22;
         private Label label23;
-        private Label label24;
+        private Label label24;        
         private Label label25;
         private Label label26;
         private CheckBox checkBox_MoveSpeed;
@@ -3695,6 +3848,12 @@ namespace eft_dma_radar.UI.Radar
         private FlowLayoutPanel flowLayoutPanel_AdvancedChams;
         private Label label14;
         private Label label15;
+        private Label lblPMCVisColor;
+        private TextBox textBox_VischeckVisColorPMC;
+        private Button button_VischeckVisColorPickPMC;
+        private Label lblPMCinVisColor;
+        private TextBox textBox_VischeckInvisColorPMC;
+        private Button button_VischeckInvisColorPickPMC;      
         private TextBox textBox_VischeckVisColor;
         private Button button_VischeckVisColorPick;
         private Label label33;
@@ -3710,6 +3869,9 @@ namespace eft_dma_radar.UI.Radar
         private FlowLayoutPanel flowLayoutPanel1;
         private Label label34;
         private CheckedListBox checkedListBox_QuestHelper;
+        private CheckBox checkBox_hideRaidcode;
+        private CheckBox checkBox_streamerMode;
+        private LinkLabel linkLabel_CheckForUpdates;
     }
 }
 

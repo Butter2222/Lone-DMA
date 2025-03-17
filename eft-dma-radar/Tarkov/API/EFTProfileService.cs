@@ -130,9 +130,11 @@ namespace eft_dma_radar.Tarkov.API
                 {
                     ProfileData result;
                     result = await LookupFromTarkovDevAsync(accountId);
-                    result ??= await LookupFromEftApiTechAsync(accountId);
+                    /// eft-api.tech now requires a bearer token, in the future should implement a backend server to do the API requests for this.
+                    /// Disabling it for now.
+                    //result ??= await LookupFromEftApiTechAsync(accountId);
                     if (result is not null ||
-                        (result is null && _eftApiNotFound.Contains(accountId) && _tdevNotFound.Contains(accountId)))
+                        (result is null && /*_eftApiNotFound.Contains(accountId) &&*/ _tdevNotFound.Contains(accountId)))
                     {
                         Cache.Profiles[accountId] = result;
                     }

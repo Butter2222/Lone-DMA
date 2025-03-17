@@ -25,5 +25,8 @@ namespace eft_dma_radar.Tarkov.WebRadar.Data
         /// </summary>
         [Key(3)]
         public IEnumerable<WebRadarPlayer> Players { get; set; } = null;
+
+        [Key(4)]
+        public IEnumerable<WebRadarLoot> Loot { get; set; } // NEW: Loot Data
     }
 }

@@ -170,6 +170,11 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
         public string TwitchChannelURL { get; protected set; }
 
         /// <summary>
+        /// Player Value
+        /// </summary>
+        public string Value { get; protected set; }
+
+        /// <summary>
         /// Player's Rotation in Local Game World.
         /// </summary>
         public Vector2 Rotation { get; private set; }
@@ -249,7 +254,9 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
         /// Player name.
         /// </summary>
         public virtual string Name { get; set; }
-
+        public PlayerProfile Profile { get; private set; }    
+        public float KD => Profile.Overall_KD ?? 0f;
+        public int TotalHoursPlayed => Profile.Hours ?? 0;
         /// <summary>
         /// Account UUID for Human Controlled Players.
         /// </summary>
@@ -1379,21 +1386,19 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
                             name = "ERROR"; // In case POS stops updating, let us know!
                         else
                             name = Name;
-                        string health = null; string level = null;
+                        string health = null;
                         if (this is ObservedPlayer observed)
                         {
                             health = observed.HealthStatus is Enums.ETagStatus.Healthy
                                 ? null
                                 : $" ({observed.HealthStatus.GetDescription()})"; // Only display abnormal health status
-                            if (observed.Profile?.Level is int levelResult)
-                                level = $"L{levelResult}:";
                         }
-                        lines.Add($"{level}{name}{health}");
-                        lines.Add($"H: {(int)Math.Round(height)} D: {(int)Math.Round(dist)}");
+                        lines.Add($"{name}{health}");
+                        lines.Add($"{(int)Math.Round(dist)}");
                     }
-                    else // just height, distance
+                    else // distance
                     {
-                        lines.Add($"{(int)Math.Round(height)},{(int)Math.Round(dist)}");
+                        lines.Add($"{(int)Math.Round(dist)}");
                         if (ErrorTimer.ElapsedMilliseconds > 100)
                             lines[0] = "ERROR"; // In case POS stops updating, let us know!
                     }
@@ -1403,6 +1408,7 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
                             (MainForm.Config.QuestHelper.Enabled && (Gear?.HasQuestItems ?? false))
                         ))
                         lines[0] = $"!!{lines[0]}"; // Notify important loot
+                    DrawPlayerHeight(canvas, point, localPlayer.Position.Y, Position.Y);
                     DrawPlayerText(canvas, point, lines);
                 }
             }
@@ -1463,6 +1469,27 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
                 start.Y + MathF.Sin(radians) * aimlineLength);
         }
 
+        private int GetMapLayer(float height)
+        {
+            var mapLayers = LoneMapManager.Map?.Config.MapLayers;
+
+            if (mapLayers is null)
+                return 0;
+
+            for (int i = mapLayers.Count - 1; i > 0; i--)
+            {
+                var layer = mapLayers[i];
+
+                if (layer.MinHeight is null)
+                    return i;
+
+                if (height >= layer.MinHeight)
+                    return i;
+            }
+
+            return 0;
+        }
+
         /// <summary>
         /// Draws Player Text on this location.
         /// </summary>
@@ -1481,6 +1508,37 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
                 canvas.DrawText(line, point, SKPaints.TextOutline); // Draw outline
                 canvas.DrawText(line, point, paints.Item2); // draw line text
                 point.Offset(0, 12 * MainForm.UIScale);
+            }
+        }
+
+        private void DrawPlayerHeight(SKCanvas canvas, SKPoint point, float localPlayerHeight, float playerHeight)
+        {
+            var localPlayerLayer = GetMapLayer(localPlayerHeight);
+            var playerLayer = GetMapLayer(playerHeight);
+
+            var numArrows = Math.Abs(playerLayer - localPlayerLayer);
+
+            if (numArrows == 0)
+                return;
+
+            var up = playerLayer - localPlayerLayer > 0;
+
+            int arrowX = -20;
+            int arrowY = 2;
+            int arrowYOffset = 5;
+            float arrowSize = 6.5f;
+
+            SKPaints.ShapeOutline.StrokeWidth = 2f;
+
+            point.Offset(arrowX * MainForm.UIScale, arrowY * MainForm.UIScale);
+
+            for (int i = 0; i < numArrows; i++)
+            {
+                using var path = up ? point.GetUpArrow(arrowSize) : point.GetDownArrow(arrowSize);
+
+                canvas.DrawPath(path, SKPaints.ShapeOutline);
+                canvas.DrawPath(path, SKPaints.PaintFood);
+                point.Offset(0, arrowYOffset * MainForm.UIScale);
             }
         }
 
@@ -1546,6 +1604,7 @@ namespace eft_dma_radar.Tarkov.EFTPlayer
                 if (loot is not null)
                 {
                     var playerValue = TarkovMarketItem.FormatPrice(gear?.Value ?? -1);
+                    Value = playerValue;
                     lines.Add($"Value: {playerValue}");
                     var iterations = 0;
                     foreach (var item in loot)

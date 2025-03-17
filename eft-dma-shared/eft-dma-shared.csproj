@@ -17,6 +17,11 @@
 	<ItemGroup>
 		<EmbeddedResource Include="..\Resources\visible.bundle" />
 		<EmbeddedResource Include="..\Resources\visibilitycheck.bundle" />
+		<EmbeddedResource Include="..\Resources\vicheckglowpmc.bundle" />
+		<EmbeddedResource Include="..\Resources\vischeckflat.bundle" />
+		<EmbeddedResource Include="..\Resources\vischeckflatpmc.bundle" />
+		<EmbeddedResource Include="..\Resources\wireframe.bundle" />
+		<EmbeddedResource Include="..\Resources\wireframepmc.bundle" />
 		<EmbeddedResource Include="..\Resources\FILE_CRYPT_KEY.bin" />
 		<EmbeddedResource Include="..\Resources\NeoSansStdRegular.otf" />
 		<EmbeddedResource Include="..\Resources\NeoSansStdMedium.otf" />
@@ -42,6 +47,7 @@
 	  <PackageReference Include="Microsoft.Bcl.Cryptography" Version="9.0.0" />
 	  <PackageReference Include="SkiaSharp.Views.WindowsForms" Version="2.88.9" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+	  <PackageReference Include="Reloaded.Assembler" Version="1.0.16" />
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
 	  <PackageReference Include="Svg.Skia" Version="2.0.0.4" />
   </ItemGroup>

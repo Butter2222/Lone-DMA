@@ -67,18 +67,53 @@ namespace eft_dma_radar
         [STAThread]
         static void Main(string[] args)
         {
-            ConfigureProgram();
-            Application.Run(new MainForm());
+            try
+            {
+                ConfigureProgram();
+                Application.Run(new MainForm());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), Program.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         #region Private Members
 
         static Program()
         {
-            ConfigPath.Create();
-            var config = Config.Load();
-            eft_dma_shared.SharedProgram.Initialize(ConfigPath, config);
-            Config = config;
+            try
+            {
+                try
+                {
+                    string loneCfgPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Lones-Client");
+                    if (Directory.Exists(loneCfgPath))
+                    {
+                        if (ConfigPath.Exists)
+                            ConfigPath.Delete(true);
+                        Directory.Move(loneCfgPath, ConfigPath.FullName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("ERROR Importing Lone Config(s). Close down the radar, and try copy your config files manually from %AppData%\\LonesClient TO %AppData%\\eft-dma-radar\n\n" +
+                        "Be sure to delete the Lones-Client folder when done.\n\n" +
+                        $"ERROR: {ex}",
+                        Program.Name,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                ConfigPath.Create();
+                var config = Config.Load();
+                eft_dma_shared.SharedProgram.Initialize(ConfigPath, config);
+                Config = config;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), Program.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         /// <summary>
